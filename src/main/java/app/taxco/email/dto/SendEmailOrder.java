@@ -7,6 +7,7 @@ public class SendEmailOrder {
 	private String email;
 	private double amount;
 	private String userName;
+	private String folio;
 	private List<String> items;
 	public String getEmail() {
 		return email;
@@ -25,6 +26,13 @@ public class SendEmailOrder {
 	}
 	public void setUserName(String userName) {
 		this.userName = userName;
+	}
+	
+	public String getFolio() {
+		return folio;
+	}
+	public void setFolio(String folio) {
+		this.folio = folio;
 	}
 	public List<String> getItems() {
 		return items;

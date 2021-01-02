@@ -19,12 +19,13 @@ public class EmailService {
 	
 	private  static Logger logger = LogManager.getLogger(EmailService.class);
 	
-	public boolean sendEmail(String email, String userName, double amount, List<String> items ) {
+	public boolean sendEmail(String email, String userName, double amount, List<String> items, String folio) {
 	 Boolean submittedSuccessfully = false;
 	 logger.info("email -> " + email);
 	 logger.info("amount -> " + amount);
 	 String message = items.stream().map(item -> item).reduce("", (cadena, item) -> (cadena + "<br>" + item)).toString();
-	 message = "Hola " + userName + "<br> Compra realizada, te compartimos el detalle. <br>" + message + "<br> Total : $" + amount;
+	 message = "Hola " + userName + "<br> Compra realizada, te compartimos el detalle. <br>" +
+	 "folio: " + folio + "<br>" + message + "<br> Total : $" + amount;
 	 logger.info("message to sendEmail ->  " +  message);
 	 submittedSuccessfully = sendEmailTool(email, message, "Compra realizada");
 	 return submittedSuccessfully;
@@ -36,7 +37,9 @@ public class EmailService {
 		boolean send = false;
 		MimeMessage message = sender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
-		logger.info("executing 'sendEmailTool()' method -> " + email);
+		logger.info("executing 'sendEmailTool()' method ");
+		logger.info("email to send -> " + email);
+		logger.info("message to send -> " + textMessage);
 		try {
 			helper.setTo(email);
 			helper.setText(textMessage, true);
@@ -48,6 +51,16 @@ public class EmailService {
 			logger.error("Hubo un error al enviar el mail: {}", e);
 		}
 		return send;
+	}
+	
+	
+	public Boolean sendResetPassword(String data, String email) {
+		 Boolean submittedSuccessfully = false;
+		 logger.info("executing 'sendResetPassword' method from EmailService");
+		 String message = "Para restablecer su contraseña ingrese a este <span><a href=\"http://localhost:4025/#/restablecer?data="+data+"\">link</a></span>";
+		 logger.info("message -> " + message);
+		 submittedSuccessfully =  this.sendEmailTool(email, message, "Restablecer Contraseña");
+		 return submittedSuccessfully;
 	}
 	
 	

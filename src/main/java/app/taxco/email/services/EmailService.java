@@ -57,7 +57,7 @@ public class EmailService {
 	public Boolean sendResetPassword(String data, String email) {
 		 Boolean submittedSuccessfully = false;
 		 logger.info("executing 'sendResetPassword' method from EmailService");
-		 String message = "Para restablecer su contraseña ingrese a este <span><a href=\"http://localhost:4025/#/restablecer?data="+data+"\">link</a></span>";
+		 String message = "Para restablecer su contraseña ingrese a este <span><a href=\"http://187.227.238.91:4500/#/restablecer?data="+data+"\">link</a></span>";
 		 logger.info("message -> " + message);
 		 submittedSuccessfully =  this.sendEmailTool(email, message, "Restablecer Contraseña");
 		 return submittedSuccessfully;

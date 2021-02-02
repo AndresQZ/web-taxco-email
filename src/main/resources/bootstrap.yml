@@ -1,0 +1,7 @@
+spring:
+  cloud:
+    config:
+      uri: http://webTaxcoConfig:8093
+      label: main
+  application:
+    name: webTaxcoEmail

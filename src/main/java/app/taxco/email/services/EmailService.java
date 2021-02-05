@@ -1,5 +1,6 @@
 package app.taxco.email.services;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -7,6 +8,7 @@ import javax.mail.internet.MimeMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -35,20 +37,24 @@ public class EmailService {
 	
 	private boolean sendEmailTool(String email , String textMessage,String subject) {
 		boolean send = false;
-		MimeMessage message = sender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message);
-		logger.info("executing 'sendEmailTool()' method ");
-		logger.info("email to send -> " + email);
-		logger.info("message to send -> " + textMessage);
 		try {
+			
+		  MimeMessage message = sender.createMimeMessage();
+		  MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+		  logger.info("executing 'sendEmailTool()' method ");
+		  logger.info("email to send -> " + email);
+		  logger.info("message to send -> " + textMessage);
+		
+			ClassPathResource image = new ClassPathResource("static/signature.jpg");
 			helper.setTo(email);
 			helper.setText(textMessage, true);
+			helper.addInline("signature", image);
 			helper.setSubject(subject);
 			sender.send(message);
 			send = true;
 			logger.info("Mail enviado!");
 		} catch (MessagingException e) {
-			logger.error("Hubo un error al enviar el mail: {}", e);
+			logger.error("Hubo un error al enviar el mail: {}", e.getMessage());
 		}
 		return send;
 	}

@@ -43,6 +43,12 @@ dependencyManagement {
 	}
 }
 
+configurations {
+    compile{
+        exclude group:'javax.servlet', module: 'servlet-api'
+    }
+}
+
 test {
 	useJUnitPlatform()
 }

@@ -1,5 +1,6 @@
 package app.taxco.email.services;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -7,6 +8,7 @@ import javax.mail.internet.MimeMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -26,8 +28,21 @@ public class EmailService {
 	 String message = items.stream().map(item -> item).reduce("", (cadena, item) -> (cadena + "<br>" + item)).toString();
 	 message = "Hola " + userName + "<br> Compra realizada, te compartimos el detalle. <br>" +
 	 "folio: " + folio + "<br>" + message + "<br> Total : $" + amount;
-	 logger.info("message to sendEmail ->  " +  message);
-	 submittedSuccessfully = sendEmailTool(email, message, "Compra realizada");
+	 
+	 String messageWithPrivacity = message +  "<br> <br>" + "<h4 style=\"font-size:medium; text-align: center;\">AVISO DE PRIVACIDAD</h4> " 
+	 +  "<div style=\"border: 3px solid rgb(99, 96, 96);padding: 10px; margin: 20px;\">  MQ JOYERIAS, con domicilio en calle Emiliano Zapata #6, colonia Acapantzingo, municipio de Cuernavaca, C.P. 62440,"
+	 + " en la entidad de  Morelos, M\u00E9xico, utilizar\u00E1 sus datos personales recabados para: "
+	 + "<ul>"
+	 +   "<li>"
+	 +    "Dar cumplimento al env\u00EDo de productos seleccionados por nuestros clientes en la direcci\u00F3n proporcionada."
+	 +   "</li>"
+	 +   "</ul>"
+	 +  "Para mayor informaci\u00F3n acerca del tratamiento y de los derechos que puede hacer valer, usted puede acceder al aviso de privacidad integral a trav\u00E9s de: http://187.227.238.91:4500 "
+	 + "</div>";
+	
+	 
+	 logger.info("message to sendEmail -> messageWithPrivacity :   " + messageWithPrivacity);
+	 submittedSuccessfully = sendEmailTool(email, messageWithPrivacity, "Compra realizada");
 	 return submittedSuccessfully;
 		
 	}
@@ -35,20 +50,25 @@ public class EmailService {
 	
 	private boolean sendEmailTool(String email , String textMessage,String subject) {
 		boolean send = false;
-		MimeMessage message = sender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message);
-		logger.info("executing 'sendEmailTool()' method ");
-		logger.info("email to send -> " + email);
-		logger.info("message to send -> " + textMessage);
 		try {
+			
+		  MimeMessage message = sender.createMimeMessage();
+		  MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+		  logger.info("executing 'sendEmailTool()' method ");
+		  logger.info("email to send -> " + email);
+		  logger.info("message to send -> " + textMessage);
+		
+			ClassPathResource logo = new ClassPathResource("static/logo.jpg");
 			helper.setTo(email);
 			helper.setText(textMessage, true);
+			helper.addInline("signature", logo);
+			//elper.ad(logo, logo);
 			helper.setSubject(subject);
 			sender.send(message);
 			send = true;
 			logger.info("Mail enviado!");
 		} catch (MessagingException e) {
-			logger.error("Hubo un error al enviar el mail: {}", e);
+			logger.error("Hubo un error al enviar el mail: {}", e.getMessage());
 		}
 		return send;
 	}

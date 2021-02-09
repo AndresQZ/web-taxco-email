@@ -3,5 +3,7 @@ spring:
     config:
       uri: http://webTaxcoConfig:8093
       label: main
+      fail-fast: true      retry:
+        initial-interval: 5000        multiplier: 1.5        max-attempts: 5
   application:
     name: webTaxcoEmail

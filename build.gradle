@@ -36,6 +36,8 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '3.0.0'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-config', version: '2.2.3.RELEASE'
+    compile group: 'org.springframework.retry', name: 'spring-retry'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '2.4.0'
 }
 
 dependencyManagement {

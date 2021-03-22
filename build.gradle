@@ -30,6 +30,8 @@ dependencies {
 	compile(group:'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.4.0')
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: '2.2.2.RELEASE'
 }
 
 test {

@@ -31,7 +31,7 @@ dependencies {
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
-    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: '2.2.2.RELEASE'
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-sleuth', version: '3.0.0'
 }
 
 test {

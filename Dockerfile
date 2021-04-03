@@ -6,7 +6,8 @@ RUN mkdir -p build/dependency && (cd build/dependency; jar -xf ../libs/*.jar)
 
 FROM openjdk:8-jdk-alpine
 RUN addgroup -S spring && adduser -S spring -G spring
-USER spring:spring
+#USER spring:spring
+USER root:root
 COPY --from=builder /home/gradle/src/build/dependency/BOOT-INF/lib /app/lib
 COPY --from=builder /home/gradle/src/build/dependency/META-INF /app/META-INF
 COPY --from=builder /home/gradle/src/build/dependency/BOOT-INF/classes /app

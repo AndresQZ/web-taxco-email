@@ -8,6 +8,7 @@ import javax.mail.internet.MimeMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -18,6 +19,12 @@ public class EmailService {
 	
 	@Autowired
 	private JavaMailSender sender;
+	
+	@Value("${web.taxco.page.url}")
+	private String pageUrl;
+	
+	@Value("${web.taxco.gateway.port}")
+	private String gateway_url;
 	
 	private  static Logger logger = LogManager.getLogger(EmailService.class);
 	
@@ -77,7 +84,7 @@ public class EmailService {
 	public Boolean sendResetPassword(String data, String email) {
 		 Boolean submittedSuccessfully = false;
 		 logger.info("executing 'sendResetPassword' method from EmailService");
-		 String message = "Para restablecer su contraseña ingrese a este <span><a href=\"http://187.227.238.91:4500/#/restablecer?data="+data+"\">link</a></span>";
+		 String message = "Para restablecer su contraseña ingrese a este <span><a href=\"http://"+pageUrl+":"+ gateway_url +"/#/restablecer?data="+data+"\">link</a></span>";
 		 logger.info("message -> " + message);
 		 submittedSuccessfully =  this.sendEmailTool(email, message, "Restablecer Contraseña");
 		 return submittedSuccessfully;
